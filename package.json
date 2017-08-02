@@ -1,0 +1,21 @@
+{
+  "name": "jenns-color-conversion-thing",
+  "version": "0.0.1",
+  "description": "A library for converting color values",
+  "scripts": {
+    "start": "",
+    "test": "qunit -c code.js -t test.js"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "qunit": "^1.0.0"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/fierce-oil"
+  },
+  "license": "MIT",
+  "keywords": [
+    "glitch",
+    "qunit"
+  ]
+}
