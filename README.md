@@ -1,6 +1,9 @@
 Jenn's Color Conversion Thing
 =============================
 
+tweet: @jennschiffer
+email: jenn@fogcreek.com
+
 ## What's this supposed to do
 
 This is a collection of functions for converting color values:
@@ -40,8 +43,18 @@ hexadecimal system - base 16 -> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
 red, green, blue - 0 to 255, 0 to 255, 0 to 255
 hex - 00 to FF, 00 to FF, 00 to FF -> #xxxxxx
 
-to do in next video:
+
+**in [part 3](https://www.youtube.com/watch?v=Ahut2jeh0WQ) i fixed some bugs, wrote some tests, DRY'd up some codes**
+
+DONE:
 * better handle single digit rgb property values when converting to hex !important
+* type checking of rgb object properties
+* fix bugs in rgb:
+  - single digits don't work
+  - 0 as a value doesn't work
 * explore better error handling
 * DRY up the code
-* type checking of rgb object properties
+
+TO DO:
+* better tests for hex value conversions
+* color name functions

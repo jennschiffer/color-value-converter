@@ -7,7 +7,6 @@
     "test": "qunit 'test.js'"
   },
   "dependencies": {
-    "express": "^4.15.3",
     "qunitjs": "^2.4.0"
   },
   "repository": {
