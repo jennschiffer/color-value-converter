@@ -1,6 +1,8 @@
 /* the library for color conversion stuff */
 
-module.exports = {
+const colornamesHex = require('./colors.js')
+
+const self = module.exports = {
   
   /*
   * rgbToHex
@@ -55,14 +57,52 @@ module.exports = {
     }
     return rgbValue
   },
+  
+    
+  /*
+  * colornameToHex
+  * takes a color name string ex. "DarkSlateBlue"
+  * returns a hex string ex. '#483D8B'
+  */
+  colornameToHex : function( colornameValue ) {
+    const hexValue = colornamesHex[colornameValue.toUpperCase()] // "PapayaWhip" works, but "PaPaYaWhIp" or "papayawhip"
+    if ( typeof hexValue !== 'string' ) {
+      throw 'colornameToHex error: color name given is invalid'
+    }
+    
+    return hexValue
+  },
 
   /*
   * colornameToRGB
-  * takes a colorname string ex. papayawhip
+  * takes a colorname string ex. "papayawhip"
   * returns an rgb object ex. { r: 255, g: 239, b: 213 }
   */
   colornameToRGB : function( colornameValue ) {
-
+    const hexValue = self.colornameToHex( colornameValue )
+    const rgbValue = self.hexToRGB( hexValue )
+    
+    return rgbValue
+  },
+  
+  /* 
+  * hexToColorname
+  * takes a hex string ex '#ffffff'
+  * returns a colorname string ex white
+  */
+  hexToColorname : function( hexValue ) {
+    // search colornamesHex for value of hexValue and return the key
+    // if key doesn't exist, throw error 'hexToColorname error: hex value doesn't represent a valid color name'
+    // else return colornameValue
+    
+    for (let colorname in colornamesHex) {
+      if ( colornamesHex[colorname] === hexValue.toUpperCase() ) {
+        return colorname
+      }
+    }
+    
+    // if no colorname value returned, that means the hex value doesn't represent a valid color name
+    throw 'hexToColorname error: hex value doesn\'t represent a valid color name'
   },
 
   /*
@@ -71,14 +111,10 @@ module.exports = {
   * returns a colorname string ex. papayawhip
   */
   rgbToColorname : function( rgbValue ) {
-
+    const hexValue = self.rgbToHex( rgbValue )
+    const colornameValue = self.hexToColorname( hexValue )
+    
+    return colornameValue
   },
-  
-  /* TODO
-  * hexToColorname
-  * takes a hex string ex '#ffffff'
-  * returns a colorname string ex white
-  * NOTE: this just returns rgbToColorname(hexToRGB(hexValue))
-  */
 
 }
