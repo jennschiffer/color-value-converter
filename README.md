@@ -1,4 +1,4 @@
-Jenn's Color Conversion Thing
+Jenn's Color Conversion Library
 =============================
 
 tweet: @jennschiffer
@@ -55,6 +55,6 @@ DONE:
 * explore better error handling
 * DRY up the code
 
-TO DO:
-* better tests for hex value conversions
-* color name functions
+**in [part 4](https://www.youtube.com/watch?v=8nN5dfvKwVg) i wrote the color name functions, added an object of colornames mapped to hex values, wrote some tests, and learned about qunit's assert throws function!**
+
+in the next livestream (the week after next since I'm going away for work for a week), i'm gonna write more nifty assert throws tests and publish this to npm maybe :D
