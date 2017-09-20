@@ -12,14 +12,14 @@ const self = module.exports = {
   rgbToHex : function( rgbValue ) {
     // let's say we're given { r: 255, g: 239, b: 213 } 
     
-    function isPositiveInteger( val ) {
-      return ( Number.isInteger(val) &&  val > -1 ) // thnx @yousopunny on twitter for tip on DRYing this up :)
+    function isValidRGBValue( val ) {
+      return ( Number.isInteger(val) &&  val > -1  && val <= 255) // thnx @yousopunny on twitter for tip on DRYing this up :)
     }
     
     if ( typeof rgbValue !== 'object' ) {
       // if not an object, error
       throw 'rgbToHex error: parameter not an object'
-    } else if ( !isPositiveInteger(rgbValue.r) || !isPositiveInteger(rgbValue.g) || !isPositiveInteger(rgbValue.b) ) {
+    } else if ( !isValidRGBValue(rgbValue.r) || !isValidRGBValue(rgbValue.g) || !isValidRGBValue(rgbValue.b) ) {
         // if any invalid r g b properties, error
         throw 'rgbToHex error: rgb object missing color channels'
       }
@@ -47,14 +47,58 @@ const self = module.exports = {
     // let's say we're given "#40E0D0"
     if ( typeof hexValue !== 'string' ) {
       throw 'hexToRGB error: parameter is not a string'
+    }      
+    
+    // let's NOT assume that the hexValue includes the octothorpe # >:y
+    function isValidRGBValue( val ) {
+      return val
     }
     
-    // let's ASSUME that the hexValue includes the octothorpe # :)
-    const rgbValue = {
-      r: parseInt(hexValue.substr(1, 2), 16),
-      g: parseInt(hexValue.substr(3, 2), 16),
-      b: parseInt(hexValue.substr(5, 2), 16)
+    let rgbValue;
+    
+    if ( hexValue.charAt(0) === '#' ) {
+      if ( hexValue.length === 7 ) {
+        rgbValue = {
+          r: parseInt(hexValue.substr(1, 2), 16),
+          g: parseInt(hexValue.substr(3, 2), 16),
+          b: parseInt(hexValue.substr(5, 2), 16)
+        }
+      }
+      else if ( hexValue.length === 4 ) {
+        rgbValue = {
+          r: parseInt(hexValue.substr(1, 1) + hexValue.substr(1, 1), 16),
+          g: parseInt(hexValue.substr(2, 1) + hexValue.substr(2, 1), 16),
+          b: parseInt(hexValue.substr(3, 1) + hexValue.substr(3, 1), 16)
+        }
+      }
+      else {
+        throw 'hexToRGB error: invalid #hex string length'
+      }
     }
+    else if ( hexValue.charAt(0) !== '#' ) {
+      if ( hexValue.length === 6 ) {
+        rgbValue = {
+          r: parseInt(hexValue.substr(0, 2), 16),
+          g: parseInt(hexValue.substr(2, 2), 16),
+          b: parseInt(hexValue.substr(4, 2), 16)
+        }
+      }
+      else if ( hexValue.length === 3 ) {
+        rgbValue = {
+          r: parseInt(hexValue.substr(0, 1) + hexValue.substr(0, 1), 16),
+          g: parseInt(hexValue.substr(1, 1) + hexValue.substr(1, 1), 16),
+          b: parseInt(hexValue.substr(2, 1) + hexValue.substr(2, 1), 16)
+        }
+      }
+      else {
+        throw 'hexToRGB error: invalid hex string length'
+      }
+    }
+    
+    if ( !rgbValue.r || !rgbValue.g || !rgbValue.b ) {
+      throw 'hexToRGB error: invalid rgb from hex values'
+    }
+    
     return rgbValue
   },
   
@@ -95,8 +139,38 @@ const self = module.exports = {
     // if key doesn't exist, throw error 'hexToColorname error: hex value doesn't represent a valid color name'
     // else return colornameValue
     
+    let searchableHexValue;
+    if ( hexValue.charAt(0) === '#' ) {
+      if ( hexValue.length === 7 ) {
+        searchableHexValue = hexValue
+      }
+      else if ( hexValue.length === 4 ) {
+        searchableHexValue = '#' + 
+          hexValue.substr(1, 1) + hexValue.substr(1, 1) + 
+          hexValue.substr(2, 1) + hexValue.substr(2, 1) + 
+          hexValue.substr(3, 1) + hexValue.substr(3, 1)
+      }
+      else {
+        throw 'hexToColorname error: invalid #hex string length'
+      }
+    }
+    else if ( hexValue.charAt(0) !== '#' ) {
+      if ( hexValue.length === 6 ) {
+        searchableHexValue = '#' + hexValue
+      }
+      else if ( hexValue.length === 3 ) {
+        searchableHexValue = '#' + 
+          hexValue.substr(0, 1) + hexValue.substr(0, 1) + 
+          hexValue.substr(1, 1) + hexValue.substr(1, 1) + 
+          hexValue.substr(2, 1) + hexValue.substr(2, 1)
+      }
+      else {
+        throw 'hexToColorname error: invalid hex string length'
+      }
+    }
+    
     for (let colorname in colornamesHex) {
-      if ( colornamesHex[colorname] === hexValue.toUpperCase() ) {
+      if ( colornamesHex[colorname] === searchableHexValue.toUpperCase() ) {
         return colorname
       }
     }
